@@ -6,6 +6,14 @@ let numStepsPerHour = 10;
 
 let numSteps = 24 * numStepsPerHour;
 
+function degrees2Radians(inputDegrees){
+    let outputRadians = undefined;
+    let pi = Math.PI;
+    outputRadians = inputDegrees * (pi/180);
+    return outputRadians;
+}
+
+
 for(let stepNum = 1; stepNum <= numSteps; stepNum ++){
     let numHours = 0;
     let numMins = 0;
@@ -37,7 +45,19 @@ for(let stepNum = 1; stepNum <= numSteps; stepNum ++){
     let julianCentury = (julianDay - 2451545)/36525
     console.log(julianDay);
     console.log(julianCentury);
+    // In degrees
+    let geomMeanLongSun = (280.46646 + julianCentury * (36000.76983 + (julianCentury * 0.0003032))) % 360;
+    console.log(geomMeanLongSun);
 
+    // In degrees
+    let geomMeanAnomalySun = 357.52911 + julianCentury * (35999.05029 - (0.0001537 * julianCentury));
+    console.log(geomMeanAnomalySun);
 
+    let eccenEarthOrbit = 0.016708634 - julianCentury * (0.000042037 + (0.0000001267 * julianCentury));
+    console.log(eccenEarthOrbit);
+
+    let sunEqOfCenter = Math.sin(degrees2Radians(geomMeanAnomalySun)) * (1.914602 - julianCentury * (0.004817 + (0.000014 * julianCentury))) + Math.sin(degrees2Radians(2 * geomMeanAnomalySun)) * (0.19993 - (0.000101 * julianCentury)) + Math.sin(degrees2Radians(3*geomMeanAnomalySun)) * 0.000289;
+
+    console.log(sunEqOfCenter);
 
 }
