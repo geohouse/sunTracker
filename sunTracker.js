@@ -13,6 +13,13 @@ function degrees2Radians(inputDegrees) {
   return outputRadians;
 }
 
+function radians2Degrees(inputRadians) {
+  let outputDegrees;
+  const pi = Math.PI;
+  outputDegrees = inputRadians * (180 / pi);
+  return outputDegrees;
+}
+
 for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
   let numHours = 0;
   let numMins = 0;
@@ -67,4 +74,58 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
     Math.sin(degrees2Radians(3 * geomMeanAnomalySun)) * 0.000289;
 
   console.log(sunEqOfCenter);
+  // in degrees
+  let sunTrueLong = geomMeanLongSun + sunEqOfCenter;
+  console.log(sunTrueLong);
+  // in degrees
+  let sunTrueAnom = geomMeanAnomalySun + sunEqOfCenter;
+  console.log(sunTrueAnom);
+  // in arbitrary units
+  let sunRadVector =
+    (1.000001018 * (1 - eccenEarthOrbit * eccenEarthOrbit)) /
+    (1 + eccenEarthOrbit * Math.cos(degrees2Radians(sunTrueAnom)));
+  console.log(sunRadVector);
+  // in degrees
+  let sunAppLong =
+    sunTrueLong -
+    0.00569 -
+    0.00478 * Math.sin(degrees2Radians(125.04 - 1934.136 * julianCentury));
+  console.log(sunAppLong);
+  // in degrees
+  let meanObliqEcliptic =
+    23 +
+    (26 +
+      (21.448 -
+        julianCentury *
+          (46.815 + julianCentury * (0.00059 - julianCentury * 0.001813))) /
+        60) /
+      60;
+  console.log(meanObliqEcliptic);
+  // in degrees
+  let obliqCorr =
+    meanObliqEcliptic +
+    0.00256 * Math.cos(degrees2Radians(125.04 - 1934.136 * julianCentury));
+  console.log(obliqCorr);
+  // in degrees
+  let sunRtAscen = radians2Degrees(
+    Math.atan2(
+      Math.cos(degrees2Radians(obliqCorr)) *
+        Math.sin(degrees2Radians(sunAppLong)),
+      Math.cos(degrees2Radians(sunAppLong))
+    )
+  );
+  console.log(sunRtAscen);
+  // in degrees
+  let sunDeclin = radians2Degrees(
+    Math.asin(
+      Math.sin(degrees2Radians(obliqCorr)) *
+        Math.sin(degrees2Radians(sunAppLong))
+    )
+  );
+  console.log(sunDeclin);
+  // unitless
+  let varY =
+    Math.tan(degrees2Radians(obliqCorr / 2)) *
+    Math.tan(degrees2Radians(obliqCorr / 2));
+  console.log(varY);
 }
