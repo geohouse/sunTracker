@@ -63,7 +63,7 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
     Math.sin(degrees2Radians(geomMeanAnomalySun)) *
       (1.914602 - julianCentury * (0.004817 + 0.000014 * julianCentury)) +
     Math.sin(degrees2Radians(2 * geomMeanAnomalySun)) *
-      (0.19993 - 0.000101 * julianCentury) +
+      (0.019993 - 0.000101 * julianCentury) +
     Math.sin(degrees2Radians(3 * geomMeanAnomalySun)) * 0.000289;
 
   console.log(sunEqOfCenter);
