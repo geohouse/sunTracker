@@ -31,21 +31,21 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
   let minutesPastMidnight = 0;
   //  Calculate hours and minutes from the current iteration of the number of steps.
   if (stepNum >= numStepsPerHour) {
-    console.log("The step num1 is: " + stepNum);
+    //console.log("The step num1 is: " + stepNum);
     numHours = Math.floor(stepNum / numStepsPerHour);
     numMins = (stepNum - numStepsPerHour * numHours) * (60 / numStepsPerHour);
-    console.log("The numHours is: " + numHours + " the numMins is: " + numMins);
+    //console.log("The numHours is: " + numHours + " the numMins is: " + numMins);
   } else {
-    console.log("The step num2 is: " + stepNum);
+    //console.log("The step num2 is: " + stepNum);
     numMins = stepNum * (60 / numStepsPerHour);
-    console.log("The numHours is: " + numHours + " the numMins is: " + numMins);
+    //console.log("The numHours is: " + numHours + " the numMins is: " + numMins);
   }
 
   minutesPastMidnight = numHours * 60 + numMins;
 
   dmy.setHours(numHours);
   dmy.setMinutes(numMins);
-  console.log(dmy);
+  //console.log(dmy);
   let dmy_time = dmy.getTime();
   // Calculation method from here:
   // https://stackoverflow.com/questions/11759992/calculating-jdayjulian-day-in-javascript
@@ -57,22 +57,22 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
 
   // 2451545 is the number of days from the start of the Julian counting to y2k
   let julianCentury = (julianDay - 2451545) / 36525;
-  console.log(julianDay);
-  console.log(julianCentury);
+  //console.log(julianDay);
+  //console.log(julianCentury);
   // In degrees
   let geomMeanLongSun =
     (280.46646 + julianCentury * (36000.76983 + julianCentury * 0.0003032)) %
     360;
-  console.log(geomMeanLongSun);
+  //console.log(geomMeanLongSun);
 
   // In degrees
   let geomMeanAnomalySun =
     357.52911 + julianCentury * (35999.05029 - 0.0001537 * julianCentury);
-  console.log(geomMeanAnomalySun);
+  //console.log(geomMeanAnomalySun);
 
   let eccenEarthOrbit =
     0.016708634 - julianCentury * (0.000042037 + 0.0000001267 * julianCentury);
-  console.log(eccenEarthOrbit);
+  //console.log(eccenEarthOrbit);
 
   let sunEqOfCenter =
     Math.sin(degrees2Radians(geomMeanAnomalySun)) *
@@ -81,24 +81,24 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
       (0.019993 - 0.000101 * julianCentury) +
     Math.sin(degrees2Radians(3 * geomMeanAnomalySun)) * 0.000289;
 
-  console.log(sunEqOfCenter);
+  //console.log(sunEqOfCenter);
   // in degrees
   let sunTrueLong = geomMeanLongSun + sunEqOfCenter;
-  console.log(sunTrueLong);
+  //console.log(sunTrueLong);
   // in degrees
   let sunTrueAnom = geomMeanAnomalySun + sunEqOfCenter;
-  console.log(sunTrueAnom);
+  //console.log(sunTrueAnom);
   // in arbitrary units
   let sunRadVector =
     (1.000001018 * (1 - eccenEarthOrbit * eccenEarthOrbit)) /
     (1 + eccenEarthOrbit * Math.cos(degrees2Radians(sunTrueAnom)));
-  console.log(sunRadVector);
+  //console.log(sunRadVector);
   // in degrees
   let sunAppLong =
     sunTrueLong -
     0.00569 -
     0.00478 * Math.sin(degrees2Radians(125.04 - 1934.136 * julianCentury));
-  console.log(sunAppLong);
+  //console.log(sunAppLong);
   // in degrees
   let meanObliqEcliptic =
     23 +
@@ -108,12 +108,12 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
           (46.815 + julianCentury * (0.00059 - julianCentury * 0.001813))) /
         60) /
       60;
-  console.log(meanObliqEcliptic);
+  //console.log(meanObliqEcliptic);
   // in degrees
   let obliqCorr =
     meanObliqEcliptic +
     0.00256 * Math.cos(degrees2Radians(125.04 - 1934.136 * julianCentury));
-  console.log(obliqCorr);
+  //console.log(obliqCorr);
   // in degrees
   let sunRtAscen = radians2Degrees(
     Math.atan2(
@@ -122,7 +122,7 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
       Math.cos(degrees2Radians(sunAppLong))
     )
   );
-  console.log(sunRtAscen);
+  //console.log(sunRtAscen);
   // in degrees
   let sunDeclin = radians2Degrees(
     Math.asin(
@@ -130,12 +130,12 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
         Math.sin(degrees2Radians(sunAppLong))
     )
   );
-  console.log(sunDeclin);
+  //console.log(sunDeclin);
   // unitless
   let varY =
     Math.tan(degrees2Radians(obliqCorr / 2)) *
     Math.tan(degrees2Radians(obliqCorr / 2));
-  console.log(varY);
+  //console.log(varY);
   // in minutes
   let eqOfTime =
     4 *
@@ -153,7 +153,7 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
           eccenEarthOrbit *
           Math.sin(2 * degrees2Radians(geomMeanAnomalySun))
     );
-  console.log(eqOfTime);
+  //console.log(eqOfTime);
 
   // in degrees
   let haSunrise = radians2Degrees(
@@ -165,22 +165,22 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
           Math.tan(degrees2Radians(sunDeclin))
     )
   );
-  console.log(haSunrise);
+  //console.log(haSunrise);
 
   let solarNoon = (720 - 4 * longitude - eqOfTime + timeZone * 60) / 1440;
   // This reports in fractional days instead of the time from Excel, but is correct. May need to change output if this is
   // needed for downstream calculations.
-  console.log(solarNoon);
+  //console.log(solarNoon);
 
   let sunriseTime = solarNoon - (haSunrise * 4) / 1440;
-  console.log(sunriseTime);
+  //console.log(sunriseTime);
 
   let sunsetTime = solarNoon + (haSunrise * 4) / 1440;
-  console.log(sunsetTime);
+  //console.log(sunsetTime);
 
   //in minutes
   let sunlightDuration = 8 * haSunrise;
-  console.log(sunlightDuration);
+  //console.log(sunlightDuration);
 
   //in minutes
   // because the entries can be negative, need to use the true modulo calculation,
@@ -190,7 +190,7 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
     (((minutesPastMidnight + eqOfTime + 4 * longitude - 60 * timeZone) % 1440) +
       1440) %
     1440;
-  console.log(trueSolarTime);
+  //console.log(trueSolarTime);
 
   // in degrees
   let hourAngle;
@@ -199,7 +199,7 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
   } else {
     hourAngle = trueSolarTime / 4 - 180;
   }
-  console.log(hourAngle);
+  //console.log(hourAngle);
 
   // in degrees
   let solarZenithAngle = radians2Degrees(
@@ -211,9 +211,61 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
           Math.cos(degrees2Radians(hourAngle))
     )
   );
-  console.log(solarZenithAngle);
+  //console.log(solarZenithAngle);
 
   // in degrees
   let solarElevationAngle = 90 - solarZenithAngle;
   console.log(solarElevationAngle);
+
+  // in degrees
+  let atmosRefraction;
+  if (solarElevationAngle > 85) {
+    atmosRefraction = 0;
+  } else if (solarElevationAngle > 5) {
+    atmosRefraction =
+      58.1 / Math.tan(degrees2Radians(solarElevationAngle)) -
+      0.07 / Math.tan(degrees2Radians(solarElevationAngle)) ** 3 +
+      0.000086 / Math.tan(degrees2Radians(solarElevationAngle)) ** 5;
+  } else if (solarElevationAngle > -0.575) {
+    atmosRefraction =
+      1735 +
+      solarElevationAngle *
+        (-518.2 +
+          solarElevationAngle *
+            (103.4 +
+              solarElevationAngle * (-12.79 + solarElevationAngle * 0.711)));
+  } else {
+    atmosRefraction = -20.772 / Math.tan(degrees2Radians(solarElevationAngle));
+  }
+  atmosRefraction /= 3600;
+  // IF(AE2>85,0,IF(AE2>5,58.1/TAN(RADIANS(AE2))-0.07/POWER(TAN(RADIANS(AE2)),3)+0.000086/POWER(TAN(RADIANS(AE2)),5),IF(AE2>-0.575,1735+AE2*(-518.2+AE2*(103.4+AE2*(-12.79+AE2*0.711))),-20.772/TAN(RADIANS(AE2)))))/3600
+
+  console.log(atmosRefraction);
+
+  // in degrees
+  let solarElevationCorrectedAtmRefract = solarElevationAngle + atmosRefraction;
+  console.log(solarElevationCorrectedAtmRefract);
+
+  // degrees clockwise from North
+  let solarAzimuthAngle;
+  if (hourAngle > 0) {
+    solarAzimuthAngle =
+      (((radians2Degrees(
+        Math.acos(
+          Math.sin(degrees2Radians(latitude)) *
+            Math.cos(degrees2Radians(solarZenithAngle)) -
+            (Math.sin(degrees2Radians(sunDeclin)) /
+              Math.cos(degrees2Radians(latitude))) *
+              Math.sin(degrees2Radians(solarZenithAngle))
+        )
+      ) +
+        180) %
+        360) +
+        360) %
+      360;
+    //MOD(DEGREES(ACOS(((SIN(RADIANS($B$3))*COS(RADIANS(AD2)))-SIN(RADIANS(T2)))/(COS(RADIANS($B$3))*SIN(RADIANS(AD2)))))+180,360)
+  } else {
+  }
+  //=IF(AC2>0,MOD(DEGREES(ACOS(((SIN(RADIANS($B$3))*COS(RADIANS(AD2)))-SIN(RADIANS(T2)))/(COS(RADIANS($B$3))*SIN(RADIANS(AD2)))))+180,360),MOD(540-DEGREES(ACOS(((SIN(RADIANS($B$3))*COS(RADIANS(AD2)))-SIN(RADIANS(T2)))/(COS(RADIANS($B$3))*SIN(RADIANS(AD2))))),360))
+  console.log(solarAzimuthAngle);
 }
