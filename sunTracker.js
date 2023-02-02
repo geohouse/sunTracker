@@ -28,6 +28,7 @@ function radians2Degrees(inputRadians) {
 for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
   let numHours = 0;
   let numMins = 0;
+  let minutesPastMidnight = 0;
   //  Calculate hours and minutes from the current iteration of the number of steps.
   if (stepNum >= numStepsPerHour) {
     console.log("The step num1 is: " + stepNum);
@@ -39,6 +40,8 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
     numMins = stepNum * (60 / numStepsPerHour);
     console.log("The numHours is: " + numHours + " the numMins is: " + numMins);
   }
+
+  minutesPastMidnight = numHours * 60 + numMins;
 
   dmy.setHours(numHours);
   dmy.setMinutes(numMins);
@@ -174,4 +177,43 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
 
   let sunsetTime = solarNoon + (haSunrise * 4) / 1440;
   console.log(sunsetTime);
+
+  //in minutes
+  let sunlightDuration = 8 * haSunrise;
+  console.log(sunlightDuration);
+
+  //in minutes
+  // because the entries can be negative, need to use the true modulo calculation,
+  // instead of the '%' which is the remainder operator in JS (gives same answer as modulo for numbers > 1, but different for <0).
+  // Modulo calculation from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
+  let trueSolarTime =
+    (((minutesPastMidnight + eqOfTime + 4 * longitude - 60 * timeZone) % 1440) +
+      1440) %
+    1440;
+  console.log(trueSolarTime);
+
+  // in degrees
+  let hourAngle;
+  if (trueSolarTime / 4 < 0) {
+    hourAngle = trueSolarTime / 4 + 180;
+  } else {
+    hourAngle = trueSolarTime / 4 - 180;
+  }
+  console.log(hourAngle);
+
+  // in degrees
+  let solarZenithAngle = radians2Degrees(
+    Math.acos(
+      Math.sin(degrees2Radians(latitude)) *
+        Math.sin(degrees2Radians(sunDeclin)) +
+        Math.cos(degrees2Radians(latitude)) *
+          Math.cos(degrees2Radians(sunDeclin)) *
+          Math.cos(degrees2Radians(hourAngle))
+    )
+  );
+  console.log(solarZenithAngle);
+
+  // in degrees
+  let solarElevationAngle = 90 - solarZenithAngle;
+  console.log(solarElevationAngle);
 }
