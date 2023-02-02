@@ -252,11 +252,11 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
     solarAzimuthAngle =
       (((radians2Degrees(
         Math.acos(
-          Math.sin(degrees2Radians(latitude)) *
+          (Math.sin(degrees2Radians(latitude)) *
             Math.cos(degrees2Radians(solarZenithAngle)) -
-            (Math.sin(degrees2Radians(sunDeclin)) /
-              Math.cos(degrees2Radians(latitude))) *
-              Math.sin(degrees2Radians(solarZenithAngle))
+            Math.sin(degrees2Radians(sunDeclin))) /
+            (Math.cos(degrees2Radians(latitude)) *
+              Math.sin(degrees2Radians(solarZenithAngle)))
         )
       ) +
         180) %
