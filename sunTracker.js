@@ -6,6 +6,11 @@ let numStepsPerHour = 10;
 
 let numDailySteps = 24 * numStepsPerHour;
 
+const latitude = 40;
+const longitude = -105;
+// positive to the east of Greenwich, negative to the west
+const timeZone = -6;
+
 function degrees2Radians(inputDegrees) {
   let outputRadians;
   const pi = Math.PI;
@@ -128,4 +133,45 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
     Math.tan(degrees2Radians(obliqCorr / 2)) *
     Math.tan(degrees2Radians(obliqCorr / 2));
   console.log(varY);
+  // in minutes
+  let eqOfTime =
+    4 *
+    radians2Degrees(
+      varY * Math.sin(2 * degrees2Radians(geomMeanLongSun)) -
+        2 * eccenEarthOrbit * Math.sin(degrees2Radians(geomMeanAnomalySun)) +
+        4 *
+          eccenEarthOrbit *
+          varY *
+          Math.sin(degrees2Radians(geomMeanAnomalySun)) *
+          Math.cos(2 * degrees2Radians(geomMeanLongSun)) -
+        0.5 * varY * varY * Math.sin(4 * degrees2Radians(geomMeanLongSun)) -
+        1.25 *
+          eccenEarthOrbit *
+          eccenEarthOrbit *
+          Math.sin(2 * degrees2Radians(geomMeanAnomalySun))
+    );
+  console.log(eqOfTime);
+
+  // in degrees
+  let haSunrise = radians2Degrees(
+    Math.acos(
+      Math.cos(degrees2Radians(90.833)) /
+        (Math.cos(degrees2Radians(latitude)) *
+          Math.cos(degrees2Radians(sunDeclin))) -
+        Math.tan(degrees2Radians(latitude)) *
+          Math.tan(degrees2Radians(sunDeclin))
+    )
+  );
+  console.log(haSunrise);
+
+  let solarNoon = (720 - 4 * longitude - eqOfTime + timeZone * 60) / 1440;
+  // This reports in fractional days instead of the time from Excel, but is correct. May need to change output if this is
+  // needed for downstream calculations.
+  console.log(solarNoon);
+
+  let sunriseTime = solarNoon - (haSunrise * 4) / 1440;
+  console.log(sunriseTime);
+
+  let sunsetTime = solarNoon + (haSunrise * 4) / 1440;
+  console.log(sunsetTime);
 }
