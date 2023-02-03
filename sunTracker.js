@@ -33,29 +33,11 @@ function calcElevationZenith(
   numMinutes = 0,
   numHours = 0
 ) {
-  let minutesPastMidnight = numHours * 60 + numMins;
-}
-
-for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
-  let numHours = 0;
-  let numMins = 0;
-  let minutesPastMidnight = 0;
-  //  Calculate hours and minutes from the current iteration of the number of steps.
-  if (stepNum >= numStepsPerHour) {
-    //console.log("The step num1 is: " + stepNum);
-    numHours = Math.floor(stepNum / numStepsPerHour);
-    numMins = (stepNum - numStepsPerHour * numHours) * (60 / numStepsPerHour);
-    //console.log("The numHours is: " + numHours + " the numMins is: " + numMins);
-  } else {
-    //console.log("The step num2 is: " + stepNum);
-    numMins = stepNum * (60 / numStepsPerHour);
-    //console.log("The numHours is: " + numHours + " the numMins is: " + numMins);
-  }
-
-  minutesPastMidnight = numHours * 60 + numMins;
+  let minutesPastMidnight = numHours * 60 + numMinutes;
+  minutesPastMidnight = numHours * 60 + numMinutes;
 
   dmy.setHours(numHours);
-  dmy.setMinutes(numMins);
+  dmy.setMinutes(numMinutes);
   //console.log(dmy);
   //   let dmy_time = dmy.getTime();
   // Calculation method from here:
@@ -293,4 +275,34 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
   }
   //MOD(540-DEGREES(ACOS(((SIN(RADIANS($B$3))*COS(RADIANS(AD2)))-SIN(RADIANS(T2)))/(COS(RADIANS($B$3))*SIN(RADIANS(AD2))))),360))
   console.log(solarAzimuthAngle);
+  return [solarElevationCorrectedAtmRefract, solarAzimuthAngle];
+}
+
+for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
+  let numHours = 0;
+  let numMins = 0;
+  let minutesPastMidnight = 0;
+  //  Calculate hours and minutes from the current iteration of the number of steps.
+  if (stepNum >= numStepsPerHour) {
+    //console.log("The step num1 is: " + stepNum);
+    numHours = Math.floor(stepNum / numStepsPerHour);
+    numMins = (stepNum - numStepsPerHour * numHours) * (60 / numStepsPerHour);
+    //console.log("The numHours is: " + numHours + " the numMins is: " + numMins);
+  } else {
+    //console.log("The step num2 is: " + stepNum);
+    numMins = stepNum * (60 / numStepsPerHour);
+    //console.log("The numHours is: " + numHours + " the numMins is: " + numMins);
+  }
+
+  [solarElevation, solarAzimuth] = calcElevationZenith(
+    latitude,
+    longitude,
+    timeZone,
+    dmy,
+    numMins,
+    numHours
+  );
+
+  console.log(`Solar elevation is: ${solarElevation}`);
+  console.log(`Solar azimuth is: ${solarAzimuth}`);
 }
