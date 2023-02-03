@@ -25,6 +25,17 @@ function radians2Degrees(inputRadians) {
   return outputDegrees;
 }
 
+function calcElevationZenith(
+  latitude = 0,
+  longitude = 0,
+  timeZone = 0,
+  dmy = new Date("2010-01-01 00:00:00"),
+  numMinutes = 0,
+  numHours = 0
+) {
+  let minutesPastMidnight = numHours * 60 + numMins;
+}
+
 for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
   let numHours = 0;
   let numMins = 0;
@@ -46,7 +57,7 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
   dmy.setHours(numHours);
   dmy.setMinutes(numMins);
   //console.log(dmy);
-  let dmy_time = dmy.getTime();
+  //   let dmy_time = dmy.getTime();
   // Calculation method from here:
   // https://stackoverflow.com/questions/11759992/calculating-jdayjulian-day-in-javascript
   // 86400000 is the number of milliseconds in a day to convert the time into the number of days
@@ -265,7 +276,21 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
       360;
     //MOD(DEGREES(ACOS(((SIN(RADIANS($B$3))*COS(RADIANS(AD2)))-SIN(RADIANS(T2)))/(COS(RADIANS($B$3))*SIN(RADIANS(AD2)))))+180,360)
   } else {
+    solarAzimuthAngle =
+      (((540 -
+        radians2Degrees(
+          Math.acos(
+            (Math.sin(degrees2Radians(latitude)) *
+              Math.cos(degrees2Radians(solarZenithAngle)) -
+              Math.sin(degrees2Radians(sunDeclin))) /
+              (Math.cos(degrees2Radians(latitude)) *
+                Math.sin(degrees2Radians(solarZenithAngle)))
+          )
+        )) %
+        360) +
+        360) %
+      360;
   }
-  //=IF(AC2>0,MOD(DEGREES(ACOS(((SIN(RADIANS($B$3))*COS(RADIANS(AD2)))-SIN(RADIANS(T2)))/(COS(RADIANS($B$3))*SIN(RADIANS(AD2)))))+180,360),MOD(540-DEGREES(ACOS(((SIN(RADIANS($B$3))*COS(RADIANS(AD2)))-SIN(RADIANS(T2)))/(COS(RADIANS($B$3))*SIN(RADIANS(AD2))))),360))
+  //MOD(540-DEGREES(ACOS(((SIN(RADIANS($B$3))*COS(RADIANS(AD2)))-SIN(RADIANS(T2)))/(COS(RADIANS($B$3))*SIN(RADIANS(AD2))))),360))
   console.log(solarAzimuthAngle);
 }
