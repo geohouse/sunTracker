@@ -1,8 +1,10 @@
 //document.getElementById("label").innerHTML = "SunTracker";
 
+import { bresenham } from "./node_modules/bresenham/index.js";
+
 let dmy = new Date("2010-06-21 00:00:00");
 
-let numStepsPerHour = 10;
+let numStepsPerHour = 1;
 
 let numDailySteps = 24 * numStepsPerHour;
 
@@ -10,6 +12,20 @@ const latitude = 40;
 const longitude = -105;
 // positive to the east of Greenwich, negative to the west
 const timeZone = -6;
+
+const focalSunArea = [
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+];
+const focalSunAndShadowCasters = [
+  [0, 0, 0, 0, 2],
+  [0, 0, 0, 0, 3],
+  [0, 0, 0, 0, 4],
+  [3, 3, 3, 3, 3],
+];
+
+const topLeftIndexOfFocalSunAreaInShadowCastersArray = [0, 0];
 
 function degrees2Radians(inputDegrees) {
   let outputRadians;
@@ -208,7 +224,7 @@ function calcElevationZenith(
 
   // in degrees
   let solarElevationAngle = 90 - solarZenithAngle;
-  console.log(solarElevationAngle);
+  //console.log(solarElevationAngle);
 
   // in degrees
   let atmosRefraction;
@@ -233,11 +249,11 @@ function calcElevationZenith(
   atmosRefraction /= 3600;
   // IF(AE2>85,0,IF(AE2>5,58.1/TAN(RADIANS(AE2))-0.07/POWER(TAN(RADIANS(AE2)),3)+0.000086/POWER(TAN(RADIANS(AE2)),5),IF(AE2>-0.575,1735+AE2*(-518.2+AE2*(103.4+AE2*(-12.79+AE2*0.711))),-20.772/TAN(RADIANS(AE2)))))/3600
 
-  console.log(atmosRefraction);
+  //console.log(atmosRefraction);
 
   // in degrees
   let solarElevationCorrectedAtmRefract = solarElevationAngle + atmosRefraction;
-  console.log(solarElevationCorrectedAtmRefract);
+  //console.log(solarElevationCorrectedAtmRefract);
 
   // degrees clockwise from North
   let solarAzimuthAngle;
@@ -274,11 +290,13 @@ function calcElevationZenith(
       360;
   }
   //MOD(540-DEGREES(ACOS(((SIN(RADIANS($B$3))*COS(RADIANS(AD2)))-SIN(RADIANS(T2)))/(COS(RADIANS($B$3))*SIN(RADIANS(AD2))))),360))
-  console.log(solarAzimuthAngle);
+  //console.log(solarAzimuthAngle);
   return [solarElevationCorrectedAtmRefract, solarAzimuthAngle];
 }
 
 for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
+  let focalSunDayTracker = [];
+  let solarElevation, solarAzimuth;
   let numHours = 0;
   let numMins = 0;
   let minutesPastMidnight = 0;
@@ -305,4 +323,23 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
 
   console.log(`Solar elevation is: ${solarElevation}`);
   console.log(`Solar azimuth is: ${solarAzimuth}`);
+
+  // Plan
+  // When solar elevation > 0 ( or > ~20 degrees to get it well above horizon so plants can use it)
+  // For every hour, create copy of the focal area array
+  // For each cell in the focal area array, use the azimuth to get the ending cell in the full shadow array that points to where the sun is
+  // use bresenham to get all of the cells between the focal cell and where the sun is located
+  // for each of those intermediate cells, calculate the sun height at that cell using the distance from the focal point and the sun elevation
+  // if any intermediate cell shades the focal cell, enter 0 in the focal cell, and move to the next one. If none of the intervening cells shade the focal cell, enter 1 and move to the next focal cell.
+  // Sum the entries in the focal area array over the day to get the number of hours of sunshine for that location for that day.
+
+  if (solarElevation > 20) {
+    let currDayFocalSun = [...focalSunArea];
+    let currDayFocalSunRows = currDayFocalSun.length;
+    let currDayFocalSunCols = currDayFocalSun[0].length;
+    console.log({ currDayFocalSunRows });
+    console.log({ currDayFocalSunCols });
+  }
 }
+
+//console.log(bresenham(1, 1, 3, 7));

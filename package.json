@@ -1,0 +1,27 @@
+{
+  "name": "suntracker",
+  "version": "1.0.0",
+  "description": "Calculates average daily sun exposure over a season for plants given nearby objects that would block the sun (e.g. trees, buildings, etc.)",
+  "main": "sunTracker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geohouse/sunTracker.git"
+  },
+  "keywords": [
+    "gardening",
+    "sun",
+    "exposure"
+  ],
+  "author": "Geoffrey House",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/geohouse/sunTracker/issues"
+  },
+  "homepage": "https://github.com/geohouse/sunTracker#readme",
+  "dependencies": {
+    "bresenham": "^0.0.4"
+  }
+}
