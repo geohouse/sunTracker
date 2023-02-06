@@ -294,6 +294,15 @@ function calcElevationZenith(
   return [solarElevationCorrectedAtmRefract, solarAzimuthAngle];
 }
 
+const focalSunRows = focalSunArea.length;
+const focalSunCols = focalSunArea[0].length;
+//console.log({ focalSunRows });
+//console.log({ focalSunCols });
+const focalSunAndShadowRows = focalSunAndShadowCasters.length;
+const focalSunAndShadowCols = focalSunAndShadowCasters[0].length;
+//console.log({ focalSunAndShadowRows });
+//console.log({ focalSunAndShadowCols });
+
 for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
   let focalSunDayTracker = [];
   let solarElevation, solarAzimuth;
@@ -335,11 +344,27 @@ for (let stepNum = 1; stepNum <= numDailySteps; stepNum++) {
 
   if (solarElevation > 20) {
     let currDayFocalSun = [...focalSunArea];
-    let currDayFocalSunRows = currDayFocalSun.length;
-    let currDayFocalSunCols = currDayFocalSun[0].length;
-    console.log({ currDayFocalSunRows });
-    console.log({ currDayFocalSunCols });
+
+    for (let row = 0; row < focalSunRows; row++) {
+      for (let col = 0; col < focalSunCols; col++) {
+        if (solarAzimuth < 135) {
+          let xend =
+            focalSunCols -
+            col +
+            (focalSunAndShadowCols -
+              focalSunCols +
+              topLeftIndexOfFocalSunAreaInShadowCastersArray[1]) -
+            1;
+          // -90 needed to get the solar azimuth (from North) to be degrees from the origin geometrically instead
+          let yend = xend * Math.tan(degrees2Radians(solarAzimuth - 90));
+          console.log({ row });
+          console.log({ col });
+          console.log({ xend });
+          console.log({ yend });
+        }
+      }
+    }
   }
 }
 
-//console.log(bresenham(1, 1, 3, 7));
+console.log(bresenham(0, 0, 3, 7));
